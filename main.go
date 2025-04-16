@@ -78,9 +78,6 @@ func routing(db *gorm.DB) {
 	v1.PUT(menu+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.EditMenuById)
 	v1.DELETE(menu+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.DeleteMenuById)
 
-	// const promo = "/promo"
-	// ...
-
 	const order = "/order"
 
 	v1.POST(order, middleware.AuthorizeHandlerCookies(), handOrder.AddOrder)

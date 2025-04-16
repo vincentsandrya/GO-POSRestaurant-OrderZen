@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	dto "github.com/vincentsandrya/GO-POSRestaurant-OrderZen/dto"
+	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/dto"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/models"
 )
 

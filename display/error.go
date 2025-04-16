@@ -10,9 +10,9 @@ type CustomError struct {
 	MessageErr string `json:"messageErr"`
 }
 
-type ErrorResponse struct {
-	MessageErrRes string `json:"messageErrRes"`
-}
+// type ErrorResponse struct {
+// 	MessageErrRes string `json:"messageErrRes"`
+// }
 
 func NewCustomErrorDisp(codeError int, messageError string) *CustomError {
 	return &CustomError{
@@ -26,16 +26,15 @@ func (c *CustomError) ErrorDisp() string {
 	return c.MessageErr
 }
 
-func (c *CustomError) ConvertToErrorResponse() ErrorResponse {
-	return ErrorResponse{
-		MessageErrRes: c.MessageErr,
-	}
-}
+// func (c *CustomError) ConvertToErrorResponse() ErrorResponse {
+// 	return ErrorResponse{
+// 		MessageErrRes: c.MessageErr,
+// 	}
+// }
 
 var (
 	ErrorWrongCredentialsLogin = errors.New("wrong email or password")
-	ErrorWrongCredentials      = NewCustomErrorDisp(http.StatusUnauthorized, "wrong credentials")
-
+	// ErrorWrongCredentials      = NewCustomErrorDisp(http.StatusUnauthorized, "wrong credentials")
 	ErrorInvalidBody        = NewCustomErrorDisp(http.StatusBadRequest, "invalid body")
 	ErrorInvalidParamID     = NewCustomErrorDisp(http.StatusBadRequest, "invalid param id")
 	ErrorUnathorized        = NewCustomErrorDisp(http.StatusUnauthorized, "you are not authorized")

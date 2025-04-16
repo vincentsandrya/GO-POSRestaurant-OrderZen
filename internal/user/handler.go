@@ -12,12 +12,10 @@ import (
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/dto"
 )
 
-// Handler handles HTTP requests for products
 type Handler struct {
 	Service *Service
 }
 
-// NewHandler creates a new product handler
 func NewHandler(service *Service) *Handler {
 	return &Handler{Service: service}
 }
@@ -31,7 +29,6 @@ func (hand *Handler) Login(c *gin.Context) {
 		return
 	}
 
-	// Perform login logic using the usecase
 	response, err := hand.Service.Login(loginInfo)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, dto.ResponseFailed(err.Error(), http.StatusUnauthorized))
@@ -57,7 +54,6 @@ func (hand *Handler) Login(c *gin.Context) {
 		return
 	}
 
-	// Set token as HttpOnly cookie
 	c.SetCookie(
 		"authToken",
 		tokenString,
@@ -68,7 +64,6 @@ func (hand *Handler) Login(c *gin.Context) {
 		true, // HttpOnly
 	)
 
-	// Send success response with user data
 	c.JSON(http.StatusOK, dto.ResponseSuccesWithData("login successfully", response))
 }
 

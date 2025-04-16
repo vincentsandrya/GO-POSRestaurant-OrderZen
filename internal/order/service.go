@@ -10,13 +10,11 @@ import (
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/models"
 )
 
-// Service provides methods to manage products
 type Service struct {
 	Repository  *Repository
 	MenuService *menu.Service
 }
 
-// NewService creates a new Product service
 func NewService(repository *Repository, menuService *menu.Service) *Service {
 	return &Service{
 		Repository:  repository,
@@ -41,7 +39,6 @@ func (svc *Service) AddOrder(req *dto.OrderRequest) (*dto.OrderResponse, error) 
 
 	req.Amount = int64(amount)
 
-	// cek promo here
 	dataPromo, err := svc.Repository.GetBestPromoForAmount(req.Amount)
 	req.PromoId = dataPromo.PromoId
 	req.Discount = dataPromo.Discount
@@ -92,7 +89,6 @@ func (svc *Service) GetOrder() (*[]dto.OrderResponse2, error) {
 
 func (svc *Service) CheckPayment(id int) (*models.PaymentMidtrans, error) {
 
-	// Not found: check payment status from Midtrans
 	midtransData, err := midtrans.CheckMidtransPaymentStatus(strconv.Itoa(id))
 	if err != nil {
 		return nil, fmt.Errorf("failed to check Midtrans status: %w", err)
@@ -104,12 +100,11 @@ func (svc *Service) CheckPayment(id int) (*models.PaymentMidtrans, error) {
 	}
 
 	if orderDate.OrderStatus == "Waiting for Payment" && (midtransData.TransactionStatus == "settlement" || midtransData.TransactionStatus == "capture") {
-		// Save the new payment data to DB
+
 		if _, err := svc.Repository.AddPaymentMidtrans(midtransData); err != nil {
 			return nil, fmt.Errorf("failed to add Midtrans payment: %w", err)
 		}
 
-		// Update order status to "Paid"
 		updateReq := &dto.OrderRequest{
 			OrderStatus: "Paid",
 			UpdatedBy:   "CheckPayment",
@@ -124,7 +119,6 @@ func (svc *Service) CheckPayment(id int) (*models.PaymentMidtrans, error) {
 }
 
 func (svc *Service) GetPayment(id int) (*models.PaymentMidtrans, error) {
-	// Not found: check payment status from Midtrans
 	midtransData, err := midtrans.CheckMidtransPaymentStatus(strconv.Itoa(id))
 	if err != nil {
 		return nil, fmt.Errorf("failed to check Midtrans status: %w", err)

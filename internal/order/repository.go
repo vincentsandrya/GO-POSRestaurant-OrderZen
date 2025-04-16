@@ -12,12 +12,10 @@ import (
 	"gorm.io/gorm"
 )
 
-// Repository defines methods for accessing products in the database
 type Repository struct {
 	DB *gorm.DB
 }
 
-// NewRepository creates a new product repository
 func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{DB: db}
 }

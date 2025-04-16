@@ -19,12 +19,8 @@ func CreateOrder(orderId int, amount int64) (res string) {
 	midtrans.ServerKey = os.Getenv("MIDTRANS_SERVERKEY")
 	midtrans.ClientKey = os.Getenv("MIDTRANS_CLIENTKEY")
 
-	// midtrans.ServerKey = "SB-Mid-server-yuXIcN-TJok6vvxxhot7C4Vl"
-	// midtrans.ClientKey = "SB-Mid-client-GWXKp9r1IWAcmHGp"
-
 	midtrans.Environment = midtrans.Sandbox
 
-	// 2. Initiate Snap request
 	req := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
 			OrderID:  strconv.Itoa(orderId),
@@ -35,7 +31,6 @@ func CreateOrder(orderId int, amount int64) (res string) {
 		},
 	}
 
-	// 3. Request create Snap transaction to Midtrans
 	snapResp, _ := snap.CreateTransaction(req)
 	fmt.Println("Response :", snapResp)
 
@@ -47,7 +42,6 @@ func CheckMidtransPaymentStatus(orderID string) (*models.PaymentMidtrans, error)
 	url := fmt.Sprintf("https://api.sandbox.midtrans.com/v2/%s/status", orderID)
 	req, _ := http.NewRequest("GET", url, nil)
 
-	// Replace with your Midtrans server key
 	serverKey := os.Getenv("MIDTRANS_SERVERKEY")
 	auth := base64.StdEncoding.EncodeToString([]byte(serverKey + ":"))
 	req.Header.Add("Content-Type", "application/json")

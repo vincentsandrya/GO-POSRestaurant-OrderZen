@@ -29,7 +29,6 @@ func Connect() (*gorm.DB, error) {
 
 	fmt.Println("Connected to the database")
 
-	// Migrate the schema/Table
 	gd := &GormDB{DB: db}
 	gd.MigrationDatabase()
 
@@ -86,7 +85,6 @@ func (gd *GormDB) MigrationDatabase() {
 		log.Fatalf("Failed to migrate table: %v", err)
 	}
 
-	// Define roles to seed
 	roles := []models.Role{
 		{RoleId: 1, Name: "admin"},
 		{RoleId: 2, Name: "cashier"},
@@ -94,7 +92,6 @@ func (gd *GormDB) MigrationDatabase() {
 		{RoleId: 4, Name: "customer"},
 	}
 
-	// Seed roles if they don't exist
 	for _, role := range roles {
 		var count int64
 		gd.DB.Model(&models.Role{}).Where("role_id = ?", role.RoleId).Count(&count)
@@ -103,7 +100,6 @@ func (gd *GormDB) MigrationDatabase() {
 		}
 	}
 
-	// Seed default admin user if not exists
 	var userCount int64
 	gd.DB.Model(&models.User{}).Where("email = ?", "admin@gmail.com").Count(&userCount)
 	if userCount == 0 {
