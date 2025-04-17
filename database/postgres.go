@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -15,6 +16,11 @@ type GormDB struct {
 }
 
 func Connect() (*gorm.DB, error) {
+
+	err := godotenv.Load()
+	if err != nil {
+		fmt.Println("Error loading .env file")
+	}
 
 	dbUser := os.Getenv("DB_USER")
 	dbPassword := os.Getenv("DB_PASSWORD")
