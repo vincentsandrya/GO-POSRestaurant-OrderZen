@@ -77,10 +77,9 @@ func (hand *Handler) Register(c *gin.Context) {
 
 	req.RoleId = 4 //customer
 
-	email, _ := c.Get("email")
-	req.CreatedBy = email.(string)
+	req.CreatedBy = req.Email
 	req.CreatedDate = time.Now()
-	req.UpdatedBy = email.(string)
+	req.UpdatedBy = req.Email
 	req.UpdatedDate = time.Now()
 
 	res, err := hand.Service.AddUser(&req)
