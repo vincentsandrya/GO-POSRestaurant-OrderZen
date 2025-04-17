@@ -3,6 +3,7 @@ package database
 import (
 	"fmt"
 	"log"
+	"os"
 
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/models"
 	"gorm.io/driver/postgres"
@@ -15,14 +16,14 @@ type GormDB struct {
 
 func Connect() (*gorm.DB, error) {
 
-	// dbHost := os.Getenv("DB_HOST")
-	// dbUser := os.Getenv("DB_USER")
-	// dbPassword := os.Getenv("DB_PASSWORD")
-	// dbName := os.Getenv("DB_NAME")
+	dbHost := os.Getenv("DB_HOST")
+	dbUser := os.Getenv("DB_USER")
+	dbPassword := os.Getenv("DB_PASSWORD")
+	dbName := os.Getenv("DB_NAME")
 
-	// conn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbUser, dbPassword, dbName)
+	conn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s sslmode=disable", dbHost, dbUser, dbPassword, dbName)
 
-	conn := fmt.Sprintf("host=postgres.railway.internal user=postgres password=wGQehkjvfsdjoOqqdYKHuvwtrkcRrAGV dbname=railway sslmode=disable")
+	// conn := fmt.Sprintf("host=postgres.railway.internal user=postgres password=wGQehkjvfsdjoOqqdYKHuvwtrkcRrAGV dbname=railway sslmode=disable")
 
 	db, err := gorm.Open(postgres.Open(conn), &gorm.Config{})
 	if err != nil {
