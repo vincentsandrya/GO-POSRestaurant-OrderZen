@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
@@ -47,7 +48,13 @@ func routing(db *gorm.DB) {
 
 	// Initialize Gin router
 	r := gin.Default()
+	r.SetTrustedProxies(nil)
 	r.Use(middleware.CorsMiddleware())
+
+	// Add a test route
+	r.GET("/ping", func(c *gin.Context) {
+		c.String(http.StatusOK, "pong")
+	})
 
 	// login doesnt need token
 	v1 := r.Group("/api/v1")
@@ -96,5 +103,5 @@ func routing(db *gorm.DB) {
 	v1.DELETE(promo+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.DeletePromoById)
 
 	// Start the server
-	r.Run(":8080")
+	r.Run("0.0.0.0:8081")
 }
