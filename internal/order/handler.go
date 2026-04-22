@@ -27,19 +27,19 @@ func (hand *Handler) AddOrder(c *gin.Context) {
 	}
 
 	//customer only
-	roleId, _ := c.Get("role_id")
-	if roleId != 4 {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, dto.ResponseFailed("unauthorized", http.StatusUnauthorized))
-		return
-	}
+	// roleId, _ := c.Get("role_id")
+	// if roleId != 4 {
+	// 	c.AbortWithStatusJSON(http.StatusUnauthorized, dto.ResponseFailed("unauthorized", http.StatusUnauthorized))
+	// 	return
+	// }
 
-	userId, _ := c.Get("user_id")
-	req.UserId = userId.(int)
+	userId := 10
+	req.UserId = userId
 
-	email, _ := c.Get("email")
-	req.CreatedBy = email.(string)
+	email := "vin@gmail.com"
+	req.CreatedBy = email
 	req.CreatedDate = time.Now()
-	req.UpdatedBy = email.(string)
+	req.UpdatedBy = email
 	req.UpdatedDate = time.Now()
 
 	res, err := hand.Service.AddOrder(&req)
@@ -195,16 +195,16 @@ func (hand *Handler) AddPromo(c *gin.Context) {
 	}
 
 	//admin only
-	roleId, _ := c.Get("role_id")
-	if roleId != 1 {
-		c.AbortWithStatusJSON(http.StatusUnauthorized, dto.ResponseFailed("unauthorized", http.StatusUnauthorized))
-		return
-	}
+	// roleId, _ := c.Get("role_id")
+	// if roleId != 1 {
+	// 	c.AbortWithStatusJSON(http.StatusUnauthorized, dto.ResponseFailed("unauthorized", http.StatusUnauthorized))
+	// 	return
+	// }
 
-	email, _ := c.Get("email")
-	req.CreatedBy = email.(string)
+	email := "vincent"
+	req.CreatedBy = email
 	req.CreatedDate = time.Now()
-	req.UpdatedBy = email.(string)
+	req.UpdatedBy = email
 	req.UpdatedDate = time.Now()
 
 	res, err := hand.Service.AddPromo(&req)

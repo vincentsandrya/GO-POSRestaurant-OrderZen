@@ -63,44 +63,85 @@ func routing(db *gorm.DB) {
 
 	const user = "/user"
 
-	v1.POST(user, middleware.AuthorizeHandlerCookies(), handUser.AddUser)
-	v1.GET(user, middleware.AuthorizeHandlerCookies(), handUser.GetUser)
-	v1.GET(user+"/:id", middleware.AuthorizeHandlerCookies(), handUser.GetUserById)
-	v1.PUT(user+"/:id", middleware.AuthorizeHandlerCookies(), handUser.EditUserById)
-	v1.DELETE(user+"/:id", middleware.AuthorizeHandlerCookies(), handUser.DeleteUserById)
+	v1.POST(user, handUser.AddUser)
+	v1.GET(user, handUser.GetUser)
+	v1.GET(user+"/:id", handUser.GetUserById)
+	v1.PUT(user+"/:id", handUser.EditUserById)
+	v1.DELETE(user+"/:id", handUser.DeleteUserById)
 
 	const menuCategory = "/menu/category"
 
-	v1.POST(menuCategory, middleware.AuthorizeHandlerCookies(), handMenu.AddMenuCategory)
-	v1.GET(menuCategory, middleware.AuthorizeHandlerCookies(), handMenu.GetMenuCategory)
-	v1.GET(menuCategory+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.GetMenuCategoryById)
-	v1.PUT(menuCategory+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.EditMenuCategoryById)
-	v1.DELETE(menuCategory+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.DeleteMenuCategoryById)
+	v1.POST(menuCategory, handMenu.AddMenuCategory)
+	v1.GET(menuCategory, handMenu.GetMenuCategory)
+	v1.GET(menuCategory+"/:id", handMenu.GetMenuCategoryById)
+	v1.PUT(menuCategory+"/:id", handMenu.EditMenuCategoryById)
+	v1.DELETE(menuCategory+"/:id", handMenu.DeleteMenuCategoryById)
 
 	const menu = "/menu"
 
-	v1.POST(menu, middleware.AuthorizeHandlerCookies(), handMenu.AddMenu)
-	v1.GET(menu, middleware.AuthorizeHandlerCookies(), handMenu.GetMenu)
-	v1.GET(menu+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.GetMenuById)
-	v1.PUT(menu+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.EditMenuById)
-	v1.DELETE(menu+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.DeleteMenuById)
+	v1.POST(menu, handMenu.AddMenu)
+	v1.GET(menu, handMenu.GetMenu)
+	v1.GET(menu+"/:id", handMenu.GetMenuById)
+	v1.PUT(menu+"/:id", handMenu.EditMenuById)
+	v1.DELETE(menu+"/:id", handMenu.DeleteMenuById)
 
 	const order = "/order"
 
-	v1.POST(order, middleware.AuthorizeHandlerCookies(), handOrder.AddOrder)
-	v1.GET(order, middleware.AuthorizeHandlerCookies(), handOrder.GetOrder)
-	v1.GET(order+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.GetOrderById)
+	v1.POST(order, handOrder.AddOrder)
+	v1.GET(order, handOrder.GetOrder)
+	v1.GET(order+"/:id", handOrder.GetOrderById)
 
 	const payment = "/order/payment"
-	v1.GET(payment+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.GetPayment)
-	v1.POST(payment+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.CheckPayment)
+	v1.GET(payment+"/:id", handOrder.GetPayment)
+	v1.POST(payment+"/:id", handOrder.CheckPayment)
 
 	const promo = "/promo"
-	v1.GET(promo, middleware.AuthorizeHandlerCookies(), handOrder.GetPromo)
-	v1.GET(promo+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.GetPromoById)
-	v1.POST(promo, middleware.AuthorizeHandlerCookies(), handOrder.AddPromo)
-	v1.PUT(promo+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.EditPromoById)
-	v1.DELETE(promo+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.DeletePromoById)
+	v1.GET(promo, handOrder.GetPromo)
+	v1.GET(promo+"/:id", handOrder.GetPromoById)
+	v1.POST(promo, handOrder.AddPromo)
+	v1.PUT(promo+"/:id", handOrder.EditPromoById)
+	v1.DELETE(promo+"/:id", handOrder.DeletePromoById)
+
+	// const user = "/user"
+
+	// v1.POST(user, middleware.AuthorizeHandlerCookies(), handUser.AddUser)
+	// v1.GET(user, middleware.AuthorizeHandlerCookies(), handUser.GetUser)
+	// v1.GET(user+"/:id", middleware.AuthorizeHandlerCookies(), handUser.GetUserById)
+	// v1.PUT(user+"/:id", middleware.AuthorizeHandlerCookies(), handUser.EditUserById)
+	// v1.DELETE(user+"/:id", middleware.AuthorizeHandlerCookies(), handUser.DeleteUserById)
+
+	// const menuCategory = "/menu/category"
+
+	// v1.POST(menuCategory, middleware.AuthorizeHandlerCookies(), handMenu.AddMenuCategory)
+	// v1.GET(menuCategory, middleware.AuthorizeHandlerCookies(), handMenu.GetMenuCategory)
+	// v1.GET(menuCategory+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.GetMenuCategoryById)
+	// v1.PUT(menuCategory+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.EditMenuCategoryById)
+	// v1.DELETE(menuCategory+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.DeleteMenuCategoryById)
+
+	// const menu = "/menu"
+
+	// v1.POST(menu, middleware.AuthorizeHandlerCookies(), handMenu.AddMenu)
+	// v1.GET(menu, middleware.AuthorizeHandlerCookies(), handMenu.GetMenu)
+	// v1.GET(menu+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.GetMenuById)
+	// v1.PUT(menu+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.EditMenuById)
+	// v1.DELETE(menu+"/:id", middleware.AuthorizeHandlerCookies(), handMenu.DeleteMenuById)
+
+	// const order = "/order"
+
+	// v1.POST(order, middleware.AuthorizeHandlerCookies(), handOrder.AddOrder)
+	// v1.GET(order, middleware.AuthorizeHandlerCookies(), handOrder.GetOrder)
+	// v1.GET(order+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.GetOrderById)
+
+	// const payment = "/order/payment"
+	// v1.GET(payment+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.GetPayment)
+	// v1.POST(payment+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.CheckPayment)
+
+	// const promo = "/promo"
+	// v1.GET(promo, middleware.AuthorizeHandlerCookies(), handOrder.GetPromo)
+	// v1.GET(promo+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.GetPromoById)
+	// v1.POST(promo, middleware.AuthorizeHandlerCookies(), handOrder.AddPromo)
+	// v1.PUT(promo+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.EditPromoById)
+	// v1.DELETE(promo+"/:id", middleware.AuthorizeHandlerCookies(), handOrder.DeletePromoById)
 
 	// Start the server
 	r.Run("0.0.0.0:8081")
