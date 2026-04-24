@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # ========== DATABASE ==========
+  postgres:
+    image: postgres:15-alpine
+    container_name: myapp-postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: myB@nk88
+      POSTGRES_DB: orderzen
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - myapp-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ========== GO BACKEND ==========
+  backend:
+    build: .
+    container_name: myapp-backend
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: myB@nk88
+      DB_NAME: orderzen
+      # Tambahkan environment variable lain yang dibutuhkan app Go Anda
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - myapp-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  myapp-network:
+    driver: bridge

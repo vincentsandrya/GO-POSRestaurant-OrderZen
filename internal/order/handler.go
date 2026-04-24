@@ -51,7 +51,23 @@ func (hand *Handler) AddOrder(c *gin.Context) {
 }
 
 func (hand *Handler) GetOrder(c *gin.Context) {
-	res, err := hand.Service.GetOrder()
+
+	limitStr := c.DefaultQuery("limit", "10")
+	pageStr := c.DefaultQuery("page", "1")
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, dto.ResponseFailed(display.ErrorInvalidParamID.MessageErr, display.ErrorInvalidParamID.CodeErr))
+		return
+	}
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, dto.ResponseFailed(display.ErrorInvalidParamID.MessageErr, display.ErrorInvalidParamID.CodeErr))
+		return
+	}
+
+	res, err := hand.Service.GetOrder(limit, page)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, dto.ResponseFailed("failed to retrieve order, "+err.Error(), http.StatusInternalServerError))
 		return

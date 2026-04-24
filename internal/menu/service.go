@@ -47,8 +47,8 @@ func (svc *Service) GetMenuCategoryById(id int) (*dto.MenuCategoryResponse, erro
 	return resp, nil
 }
 
-func (svc *Service) GetMenuCategory() (*[]dto.MenuCategoryResponse, error) {
-	resp, err := svc.Repository.GetMenuCategory()
+func (svc *Service) GetMenuCategory(limit int, page int) (*[]dto.MenuCategoryResponse, error) {
+	resp, err := svc.Repository.GetMenuCategory(limit, page)
 	if err != nil {
 		return nil, err
 	}
@@ -110,8 +110,8 @@ func (svc *Service) GetMenuById(id int) (*dto.MenuResponse, error) {
 	return resp, nil
 }
 
-func (svc *Service) GetMenu() (*[]dto.MenuResponse, error) {
-	resp, err := svc.Repository.GetMenu()
+func (svc *Service) GetMenu(limit int, page int) (*[]dto.MenuResponse, error) {
+	resp, err := svc.Repository.GetMenu(limit, page)
 	if err != nil {
 		return nil, err
 	}

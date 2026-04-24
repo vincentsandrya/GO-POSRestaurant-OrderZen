@@ -48,7 +48,23 @@ func (hand *Handler) AddMenuCategory(c *gin.Context) {
 }
 
 func (hand *Handler) GetMenuCategory(c *gin.Context) {
-	res, err := hand.Service.GetMenuCategory()
+
+	limitStr := c.DefaultQuery("limit", "10")
+	pageStr := c.DefaultQuery("page", "1")
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, dto.ResponseFailed(display.ErrorInvalidParamID.MessageErr, display.ErrorInvalidParamID.CodeErr))
+		return
+	}
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, dto.ResponseFailed(display.ErrorInvalidParamID.MessageErr, display.ErrorInvalidParamID.CodeErr))
+		return
+	}
+
+	res, err := hand.Service.GetMenuCategory(limit, page)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, dto.ResponseFailed("failed to retrieve category, "+err.Error(), http.StatusInternalServerError))
 		return
@@ -158,7 +174,23 @@ func (hand *Handler) AddMenu(c *gin.Context) {
 }
 
 func (hand *Handler) GetMenu(c *gin.Context) {
-	res, err := hand.Service.GetMenu()
+
+	limitStr := c.DefaultQuery("limit", "10")
+	pageStr := c.DefaultQuery("page", "1")
+
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, dto.ResponseFailed(display.ErrorInvalidParamID.MessageErr, display.ErrorInvalidParamID.CodeErr))
+		return
+	}
+
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, dto.ResponseFailed(display.ErrorInvalidParamID.MessageErr, display.ErrorInvalidParamID.CodeErr))
+		return
+	}
+
+	res, err := hand.Service.GetMenu(limit, page)
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, dto.ResponseFailed("failed to retrieve category, "+err.Error(), http.StatusInternalServerError))
 		return

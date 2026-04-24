@@ -86,8 +86,8 @@ func (svc *Service) GetUserById(id int) (*dto.UserResponse, error) {
 	return resp, nil
 }
 
-func (svc *Service) GetUser() (*[]dto.UserResponse, error) {
-	resp, err := svc.Repository.GetUser()
+func (svc *Service) GetUser(limit int, page int) (*[]dto.UserResponse, error) {
+	resp, err := svc.Repository.GetUser(limit, page)
 	if err != nil {
 		return nil, err
 	}

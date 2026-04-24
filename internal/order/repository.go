@@ -20,11 +20,11 @@ func NewRepository(db *gorm.DB) *Repository {
 	return &Repository{DB: db}
 }
 
-func (r *Repository) GetOrder() (*[]dto.OrderResponse2, error) {
+func (r *Repository) GetOrder(limit int, page int) (*[]dto.OrderResponse2, error) {
 	var err error
 	res := []dto.OrderResponse2{}
 
-	err = r.DB.Model(&models.Order{}).Scan(&res).Error
+	err = r.DB.Model(&models.Order{}).Limit(limit).Offset((page - 1) * limit).Scan(&res).Error
 
 	if err != nil {
 		return nil, err

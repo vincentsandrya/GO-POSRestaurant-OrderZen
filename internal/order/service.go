@@ -78,8 +78,8 @@ func (svc *Service) GetOrderById(id int) (*dto.OrderResponse, error) {
 	return resp, nil
 }
 
-func (svc *Service) GetOrder() (*[]dto.OrderResponse2, error) {
-	resp, err := svc.Repository.GetOrder()
+func (svc *Service) GetOrder(limit int, page int) (*[]dto.OrderResponse2, error) {
+	resp, err := svc.Repository.GetOrder(limit, page)
 	if err != nil {
 		return nil, err
 	}

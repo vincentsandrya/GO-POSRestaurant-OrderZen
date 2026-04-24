@@ -19,10 +19,10 @@ func NewRepository(db *gorm.DB) *Repository {
 }
 
 // START MENU CATEGORY
-func (r *Repository) GetMenuCategory() (*[]dto.MenuCategoryResponse, error) {
+func (r *Repository) GetMenuCategory(limit int, page int) (*[]dto.MenuCategoryResponse, error) {
 	var res []dto.MenuCategoryResponse
 
-	err := r.DB.Model(&models.MenuCategory{}).Scan(&res).Error
+	err := r.DB.Model(&models.MenuCategory{}).Limit(limit).Offset((page - 1) * limit).Scan(&res).Error
 	if err != nil {
 		return nil, err
 	}
@@ -95,7 +95,7 @@ func (r *Repository) DeleteMenuCategoryById(id int) error {
 
 //START MENU
 
-func (r *Repository) GetMenu() (*[]dto.MenuResponse, error) {
+func (r *Repository) GetMenu(limit int, page int) (*[]dto.MenuResponse, error) {
 	var res []dto.MenuResponse
 
 	err := r.DB.Table("menus").
@@ -111,6 +111,8 @@ func (r *Repository) GetMenu() (*[]dto.MenuResponse, error) {
 			menus.updated_by,
 			menus.updated_date`).
 		Joins("left join menu_categories on menu_categories.menu_category_id = menus.menu_category_id").
+		Limit(limit).
+		Offset((page - 1) * limit).
 		Scan(&res).Error
 
 	if err != nil {

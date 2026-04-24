@@ -27,10 +27,10 @@ func (r *Repository) Login(email string) (*models.User, error) {
 	return &cust, nil
 }
 
-func (r *Repository) GetUser() (*[]dto.UserResponse, error) {
+func (r *Repository) GetUser(limit int, page int) (*[]dto.UserResponse, error) {
 	var res []dto.UserResponse
 
-	err := r.DB.Model(&models.User{}).Scan(&res).Error
+	err := r.DB.Model(&models.User{}).Limit(limit).Offset((page - 1) * limit).Scan(&res).Error
 	if err != nil {
 		return nil, err
 	}
