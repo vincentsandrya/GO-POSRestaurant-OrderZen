@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/database"
+	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/internal/cache"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/internal/menu"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/internal/order"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/internal/user"
@@ -27,12 +28,15 @@ func main() {
 		log.Fatal("Failed to connect to the database:", err)
 	}
 
+	rdb := database.InitRedis()
+	cacheRedis := cache.NewRedisCache(rdb)
+
 	fmt.Println(db)
 
-	routing(db)
+	routing(db, cacheRedis)
 }
 
-func routing(db *gorm.DB) {
+func routing(db *gorm.DB, cacheRedis *cache.RedisCache) {
 	// Initialize repository, service, and handler
 	repoUser := user.NewRepository(db)
 	servUser := user.NewService(repoUser)
@@ -43,7 +47,7 @@ func routing(db *gorm.DB) {
 	handMenu := menu.NewHandler(servMenu)
 
 	repoOrder := order.NewRepository(db)
-	servOrder := order.NewService(repoOrder, servMenu)
+	servOrder := order.NewService(repoOrder, servMenu, cacheRedis)
 	handOrder := order.NewHandler(servOrder)
 
 	// Initialize Gin router

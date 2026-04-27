@@ -3,8 +3,10 @@ package order
 import (
 	"fmt"
 	"strconv"
+	"time"
 
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/dto"
+	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/internal/cache"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/internal/menu"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/internal/midtrans"
 	"github.com/vincentsandrya/GO-POSRestaurant-OrderZen/models"
@@ -13,12 +15,14 @@ import (
 type Service struct {
 	Repository  *Repository
 	MenuService *menu.Service
+	CacheRedis  *cache.RedisCache
 }
 
-func NewService(repository *Repository, menuService *menu.Service) *Service {
+func NewService(repository *Repository, menuService *menu.Service, cacheRedis *cache.RedisCache) *Service {
 	return &Service{
 		Repository:  repository,
 		MenuService: menuService,
+		CacheRedis:  cacheRedis,
 	}
 }
 
@@ -66,6 +70,11 @@ func (svc *Service) AddOrder(req *dto.OrderRequest) (*dto.OrderResponse, error) 
 		return nil, err
 	}
 
+	err = svc.CacheRedis.DeleteByPrefix("order")
+	if err != nil {
+		return nil, err
+	}
+
 	return res, nil
 }
 
@@ -79,7 +88,23 @@ func (svc *Service) GetOrderById(id int) (*dto.OrderResponse, error) {
 }
 
 func (svc *Service) GetOrder(limit int, page int) (*[]dto.OrderResponse2, error) {
+	var res []dto.OrderResponse2
+
+	keyCache := fmt.Sprintf("order-%d-%d", limit, page)
+
+	fmt.Println("svc.CacheRedis.Get(keyCache, &res)")
+	err := svc.CacheRedis.Get(keyCache, &res)
+	if err == nil {
+		return &res, nil
+	}
+
+	fmt.Println("svc.Repository.GetOrder(limit, page)")
 	resp, err := svc.Repository.GetOrder(limit, page)
+	if err != nil {
+		return nil, err
+	}
+
+	err = svc.CacheRedis.Set(keyCache, resp, 1*time.Hour)
 	if err != nil {
 		return nil, err
 	}
@@ -122,6 +147,11 @@ func (svc *Service) GetPayment(id int) (*models.PaymentMidtrans, error) {
 	midtransData, err := midtrans.CheckMidtransPaymentStatus(strconv.Itoa(id))
 	if err != nil {
 		return nil, fmt.Errorf("failed to check Midtrans status: %w", err)
+	}
+
+	err = svc.CacheRedis.DeleteByPrefix("order")
+	if err != nil {
+		return nil, err
 	}
 
 	return midtransData, nil
